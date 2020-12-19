@@ -24,7 +24,8 @@
 
 	function convertToEmojiString(string, opt) {
 		globalQuoteCounter = 0;
-		return [...string].map(x => x.toEmoji(opt)).join(opt.nitroEmoji ? '' : ' ');
+		console.log([...string].map(x => x.toEmoji(opt)))
+		return [...string].map(x => x == '\n' ? '\n' : x.toEmoji(opt) + (opt.nitroEmoji ? '' : ' ')).join('').trim();
 	};
 
 	function copyOutput() {
@@ -100,7 +101,7 @@
 
 	String.prototype.toEmoji = function(opt) {
 		if (this == '\n') return this;
-		
+
 		const char = this.toUpperCase();
 		let choice;
 
