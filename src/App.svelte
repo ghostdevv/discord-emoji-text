@@ -7,6 +7,7 @@
 		nitroEmoji: true,
 		numbers: true,
 		unknown: true,
+		prefixSpace: false,
 
 		showInfo: false
 	};
@@ -24,7 +25,7 @@
 
 	function convertToEmojiString(string, opt) {
 		globalQuoteCounter = 0;
-		return [...string].map(x => x == '\n' ? '\n' : x.toEmoji(opt) + (opt.nitroEmoji ? '' : ' ')).join('').trim();
+		return (opt.prefixSpace ? '­' : '') + [...string].map(x => x == '\n' ? '\n' : x.toEmoji(opt) + (opt.nitroEmoji ? '' : ' ')).join('').trim();
 	};
 
 	function copyOutput() {
@@ -146,6 +147,10 @@
 		<div>
 			<input type="checkbox" id="nitro" bind:checked={opt.nitroEmoji} />
 			<label for="nitro">Use nitro emojis</label>
+		</div>
+		<div>
+			<input type="checkbox" id="prefix" bind:checked={opt.prefixSpace} />
+			<label for="prefix">"Empty Space" Prefix</label>
 		</div>
 	</div>
 	<div class="buttons">
