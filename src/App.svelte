@@ -13,7 +13,9 @@
 
 	const data = {
 		input: 'Hello World',
-		output: ''
+		output: '',
+
+		outputElement: undefined
 	};
 
 	$: data.output = convertToEmojiString(data.input, opt);
@@ -23,6 +25,19 @@
 	function convertToEmojiString(string, opt) {
 		globalQuoteCounter = 0;
 		return [...string].map(x => x.toEmoji(opt)).join(opt.nitroEmoji ? '' : ' ');
+	};
+
+	function copyOutput() {
+		data.outputElement.focus();
+		data.outputElement.select();
+		try {
+			const x = document.execCommand('copy');
+			if (!x) throw x;
+			alert('Copied!')
+		}
+		catch {
+			alert('There was a error in copying')
+		}
 	};
 
 	const convertionData = {
@@ -134,10 +149,11 @@
 	</div>
 	<div class="buttons">
 		<button on:click={() => data.input = ''}>Clear</button>
+		<button on:click={copyOutput}>Copy Output</button>
 	</div>
 	<div class="input">
 		<textarea bind:value={data.input}></textarea>
-		<textarea bind:value={data.output} disabled></textarea>
+		<textarea bind:this={data.outputElement} bind:value={data.output} ></textarea>
 	</div>
 </main>
 
