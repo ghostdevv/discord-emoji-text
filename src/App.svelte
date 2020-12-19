@@ -18,7 +18,10 @@
 
 	$: data.output = convertToEmojiString(data.input, opt);
 
+	let globalQuoteCounter = 0;
+
 	function convertToEmojiString(string, opt) {
+		globalQuoteCounter = 0;
 		return [...string].map(x => x.toEmoji(opt)).join(opt.nitroEmoji ? '' : ' ');
 	};
 
@@ -64,7 +67,13 @@
 			'9': [ ':91:', ':nine:' ]
 		},
 		symbols: {
-			' ': [ ':_1:', ':blue_square:' ]
+			' ': [ ':_1:', ':blue_square:' ],
+			'.': [ ':b1:', ':small_blue_diamond:' ],
+			',': [ ':c1:', ':small_red_triangle_down:' ],
+			'!': [ ':d1:', ':exclamation:' ],
+			'?': [ ':e1:', ':question:' ],
+			'"': [ ':f1:', ':pause_button: ' ],
+			"'": [ ':f1:', ':pause_button: ' ]
 		},
 		else: [':a1:', ':record_button:']
 	};
@@ -84,7 +93,13 @@
 		} else if (convertionKeys.numbers().includes(char)) {
 			if (opt.numbers) choice = convertionData.numbers[char];
 		} else if (convertionKeys.symbols().includes(char)) {
-			if (opt.symbols) choice = convertionData.symbols[char];
+			if (opt.symbols) {
+				choice = convertionData.symbols[char];
+				if (['"', "'"].includes(char)) {
+					choice[0] = globalQuoteCounter % 2 == 0 ? ':f1:' : ':g1:';
+					globalQuoteCounter++;
+				};
+			};
 		} else {
 			if (opt.unknown) choice = convertionData.else;
 		};
