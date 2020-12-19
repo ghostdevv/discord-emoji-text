@@ -33,7 +33,6 @@
 		try {
 			const x = document.execCommand('copy');
 			if (!x) throw x;
-			alert('Copied!')
 		}
 		catch {
 			alert('There was a error in copying')
