@@ -122,7 +122,7 @@
 	</div>
 	<div class="input">
 		<textarea bind:value={data.input}></textarea>
-		<textarea bind:value={data.output}></textarea>
+		<textarea bind:value={data.output} disabled></textarea>
 	</div>
 </main>
 
