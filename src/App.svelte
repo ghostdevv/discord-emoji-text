@@ -24,7 +24,6 @@
 
 	function convertToEmojiString(string, opt) {
 		globalQuoteCounter = 0;
-		console.log([...string].map(x => x.toEmoji(opt)))
 		return [...string].map(x => x == '\n' ? '\n' : x.toEmoji(opt) + (opt.nitroEmoji ? '' : ' ')).join('').trim();
 	};
 
