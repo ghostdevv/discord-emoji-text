@@ -99,6 +99,8 @@
 	};
 
 	String.prototype.toEmoji = function(opt) {
+		if (this == '\n') return this;
+		
 		const char = this.toUpperCase();
 		let choice;
 
