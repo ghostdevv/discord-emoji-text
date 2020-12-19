@@ -2,10 +2,11 @@
 	import { fade } from 'svelte/transition';
 
 	const opt = {
-		spaces: true,
+		symbols: true,
+		letters: true,
 		nitroEmoji: true,
 		numbers: true,
-		unkown: true,
+		unknown: true,
 
 		showInfo: false
 	};
@@ -21,31 +22,74 @@
 		return [...string].map(x => x.toEmoji(opt)).join(opt.nitroEmoji ? '' : ' ');
 	};
 
-	const numbersAsWords = {
-		1: 'one',
-		2: 'two',
-		3: 'three',
-		4: 'four',
-		5: 'five',
-		6: 'six',
-		7: 'seven',
-		8: 'eight',
-		9: 'nine',
-		0: 'zero'
+	const convertionData = {
+		letters: {
+			A: [ ':A1:', ':regional_indicator_a:' ],
+			B: [ ':B1:', ':regional_indicator_b:' ],
+			C: [ ':C1:', ':regional_indicator_c:' ],
+			D: [ ':D1:', ':regional_indicator_d:' ],
+			E: [ ':E1:', ':regional_indicator_e:' ],
+			F: [ ':F1:', ':regional_indicator_f:' ],
+			G: [ ':G1:', ':regional_indicator_g:' ],
+			H: [ ':H1:', ':regional_indicator_h:' ],
+			I: [ ':I1:', ':regional_indicator_i:' ],
+			J: [ ':J1:', ':regional_indicator_j:' ],
+			K: [ ':K1:', ':regional_indicator_k:' ],
+			L: [ ':L1:', ':regional_indicator_l:' ],
+			M: [ ':M1:', ':regional_indicator_m:' ],
+			N: [ ':N1:', ':regional_indicator_n:' ],
+			O: [ ':O1:', ':regional_indicator_o:' ],
+			P: [ ':P1:', ':regional_indicator_p:' ],
+			Q: [ ':Q1:', ':regional_indicator_q:' ],
+			R: [ ':R1:', ':regional_indicator_r:' ],
+			S: [ ':S1:', ':regional_indicator_s:' ],
+			T: [ ':T1:', ':regional_indicator_t:' ],
+			U: [ ':U1:', ':regional_indicator_u:' ],
+			V: [ ':V1:', ':regional_indicator_v:' ],
+			W: [ ':W1:', ':regional_indicator_w:' ],
+			X: [ ':X1:', ':regional_indicator_x:' ],
+			Y: [ ':Y1:', ':regional_indicator_y:' ],
+			Z: [ ':Z1:', ':regional_indicator_z:' ]
+		},
+		numbers: {
+			'0': [ ':01:', ':zero:' ],
+			'1': [ ':11:', ':one:' ],
+			'2': [ ':21:', ':two:' ],
+			'3': [ ':31:', ':three:' ],
+			'4': [ ':41:', ':four:' ],
+			'5': [ ':51:', ':five:' ],
+			'6': [ ':61:', ':six:' ],
+			'7': [ ':71:', ':seven:' ],
+			'8': [ ':81:', ':eight:' ],
+			'9': [ ':91:', ':nine:' ]
+		},
+		symbols: {
+			' ': [ ':_1:', ':blue_square:' ]
+		},
+		else: [':a1:', ':record_button:']
+	};
+
+	const convertionKeys = {
+		letters: () => Object.keys(convertionData.letters),
+		numbers: () => Object.keys(convertionData.numbers),
+		symbols: () => Object.keys(convertionData.symbols)
 	};
 
 	String.prototype.toEmoji = function(opt) {
-		if (opt.nitroEmoji) {
-			if (this == ' ') return opt.spaces ? ':_1:' : ' ';
-			if (!isNaN(Number(this)) && !opt.numbers) return this;
-			if (![...'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 '].includes(this.toUpperCase())) return opt.unkown ? ':a1:' : this;
-			return `:${this.toUpperCase()}1:`;
+		const char = this.toUpperCase();
+		let choice;
+
+		if (convertionKeys.letters().includes(char)) {
+			if (opt.letters) choice = convertionData.letters[char];
+		} else if (convertionKeys.numbers().includes(char)) {
+			if (opt.numbers) choice = convertionData.numbers[char];
+		} else if (convertionKeys.symbols().includes(char)) {
+			if (opt.symbols) choice = convertionData.symbols[char];
 		} else {
-			if (this == ' ') return opt.spaces ? ':blue_square:' : ' ';
-			if (!isNaN(Number(this)) && opt.numbers) return `:${numbersAsWords[Number(this)]}:`;
-			if (![...'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 '].includes(this.toUpperCase())) return opt.unkown ? ':record_button:' : this;
-			return `:regional_indicator_${this.toLowerCase()}:`;
+			if (opt.unknown) choice = convertionData.else;
 		};
+
+		return choice ? opt.nitroEmoji ? choice[0] : choice[1] : this;
 	};
 </script>
 
@@ -53,20 +97,24 @@
 	<span>Text to Emoji</span>
 	<div class="options">
 		<div>
-			<input type="checkbox" id="spaces" bind:checked={opt.spaces} />
-			<label for="spaces">Convert spaces to emoji</label>
+			<input type="checkbox" id="symbols" bind:checked={opt.symbols} />
+			<label for="symbols">Symbols</label>
 		</div>
 		<div>
 			<input type="checkbox" id="numbers" bind:checked={opt.numbers} />
-			<label for="numbers">Convert numbers to emoji</label>
+			<label for="numbers">Numbers</label>
+		</div>
+		<div>
+			<input type="checkbox" id="letters" bind:checked={opt.letters} />
+			<label for="letters">Letters</label>
+		</div>
+		<div>
+			<input type="checkbox" id="unknown" bind:checked={opt.unknown} />
+			<label for="unknown">Convert unsupported chars to unknown</label>
 		</div>
 		<div>
 			<input type="checkbox" id="nitro" bind:checked={opt.nitroEmoji} />
 			<label for="nitro">Use nitro emojis</label>
-		</div>
-		<div>
-			<input type="checkbox" id="unkown" bind:checked={opt.unkown} />
-			<label for="unkown">Convert unsupported chars to unkown</label>
 		</div>
 	</div>
 	<div class="buttons">
