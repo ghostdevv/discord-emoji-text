@@ -35,8 +35,8 @@
 			if (!x) throw x;
 		}
 		catch {
-			alert('There was a error in copying')
-		}
+			alert('There was a error in copying');
+		};
 	};
 
 	const convertionData = {
