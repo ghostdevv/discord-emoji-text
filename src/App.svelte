@@ -150,7 +150,7 @@
 		</div>
 		<div>
 			<input type="checkbox" id="prefix" bind:checked={opt.prefixSpace} />
-			<label for="prefix">"Empty Space" Prefix</label>
+			<label for="prefix">Smaller Emojis</label>
 		</div>
 	</div>
 	<div class="buttons">
